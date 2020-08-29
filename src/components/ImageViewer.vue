@@ -28,6 +28,8 @@ import { reactive, computed } from "vue";
 
 export default {
     setup() {
+
+
         const state = reactive({
             image: null,
             hasImage: computed(() => !!state.image),
