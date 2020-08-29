@@ -27,12 +27,15 @@
 </template>
 
 <script>
-import { reactive, computed } from "vue";
-import { useStore } from '../story';
+import { reactive, computed, ref } from "vue";
+import { useStore, setRefImage } from '../story';
 
 export default {
     setup() {
       const store = useStore()
+      const refImage = ref(null)
+
+      setRefImage(refImage)
 
       const state = reactive({
         image: null,
@@ -51,7 +54,7 @@ export default {
           reader.readAsDataURL(file)
       }
 
-      return { state, handleUpload }
+      return { state, handleUpload, refImage }
     }
 }
 </script>
