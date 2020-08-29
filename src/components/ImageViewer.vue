@@ -17,6 +17,9 @@
         ref="refImage"
         class="w-full"
         :src="state.image"
+        :style="{
+          filter: state.fx
+        }"
         alt="">
     </div>
 
@@ -25,28 +28,30 @@
 
 <script>
 import { reactive, computed } from "vue";
+import { useStore } from '../story';
 
 export default {
     setup() {
+      const store = useStore()
 
+      const state = reactive({
+        image: null,
+        hasImage: computed(() => !!state.image),
+        fx: computed(() => `grayscale(${store.fx.grayscale}%) blur(${store.fx.blur}px) brightness(${store.fx.brightness}%) contrast(${store.fx.contrast}%) saturate(${store.fx.saturate})`)
+      })
 
-        const state = reactive({
-            image: null,
-            hasImage: computed(() => !!state.image),
-        })
+      const handleUpload = (event) => {
+          const [file] = event.target.files   
+          const reader = new FileReader(file)
 
-        const handleUpload = (event) => {
-            const [file] = event.target.files   
-            const reader = new FileReader(file)
+          reader.onloadend = () => {
+              state.image = reader.result
+          }
 
-            reader.onloadend = () => {
-                state.image = reader.result
-            }
+          reader.readAsDataURL(file)
+      }
 
-            reader.readAsDataURL(file)
-        }
-
-        return { state, handleUpload }
+      return { state, handleUpload }
     }
 }
 </script>
